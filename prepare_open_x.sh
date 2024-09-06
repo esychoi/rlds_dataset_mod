@@ -13,10 +13,10 @@ Adjust workers to fit the available memory of your machine, the more workers + e
 The default values are tested with a server with ~120GB of RAM and 24 cores.
 '
 
-DOWNLOAD_DIR=<your_download_dir>
-CONVERSION_DIR=<temporary_dir_for_conversion>
-N_WORKERS=20                  # number of workers used for parallel conversion --> adjust based on available RAM
-MAX_EPISODES_IN_MEMORY=200    # number of episodes converted in parallel --> adjust based on available RAM
+DOWNLOAD_DIR="/data/OpenX-Embodiment"
+CONVERSION_DIR="/tmp"
+N_WORKERS=10                  # number of workers used for parallel conversion --> adjust based on available RAM
+MAX_EPISODES_IN_MEMORY=100    # number of episodes converted in parallel --> adjust based on available RAM
 
 # increase limit on number of files opened in parallel to 20k --> conversion opens up to 1k temporary files
 # in /tmp to store dataset during conversion
@@ -28,33 +28,8 @@ echo "!!! Instead download the bridge_dataset from here: https://rail.eecs.berke
 # format: [dataset_name, dataset_version, transforms]
 DATASET_TRANSFORMS=(
     # Datasets used for OpenVLA: https://openvla.github.io/
-    "fractal20220817_data 0.1.0 resize_and_jpeg_encode"
-    "bridge 0.1.0 resize_and_jpeg_encode"  
-    "kuka 0.1.0 resize_and_jpeg_encode,filter_success"
-    "taco_play 0.1.0 resize_and_jpeg_encode"
-    "jaco_play 0.1.0 resize_and_jpeg_encode"
-    "berkeley_cable_routing 0.1.0 resize_and_jpeg_encode"
-    "roboturk 0.1.0 resize_and_jpeg_encode"
-    "viola 0.1.0 resize_and_jpeg_encode"
-    "berkeley_autolab_ur5 0.1.0 resize_and_jpeg_encode,flip_wrist_image_channels"
-    "toto 0.1.0 resize_and_jpeg_encode"
-    "language_table 0.1.0 resize_and_jpeg_encode"
-    "stanford_hydra_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode,flip_wrist_image_channels,flip_image_channels"
     "austin_buds_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "nyu_franka_play_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "furniture_bench_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "ucsd_kitchen_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "austin_sailor_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "austin_sirius_dataset_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "bc_z 0.1.0 resize_and_jpeg_encode"
-    "dlr_edan_shared_control_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "iamlab_cmu_pickup_insert_converted_externally_to_rlds 0.1.0 resize_and_jpeg_encode"
-    "utaustin_mutex 0.1.0 resize_and_jpeg_encode,flip_wrist_image_channels,flip_image_channels"
-    "berkeley_fanuc_manipulation 0.1.0 resize_and_jpeg_encode,flip_wrist_image_channels,flip_image_channels"
-    "cmu_stretch 0.1.0 resize_and_jpeg_encode"
-    "dobbe 0.0.1 resize_and_jpeg_encode"
-    "fmb 0.0.1 resize_and_jpeg_encode"
-    "droid 1.0.0 resize_and_jpeg_encode"
+
 )
 
 for tuple in "${DATASET_TRANSFORMS[@]}"; do

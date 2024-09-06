@@ -34,6 +34,8 @@ class MultiThreadedAdhocDatasetBuilder(tfds.core.dataset_builders.AdhocBuilder):
         self._generator_fcn = generator_fcn
         self._n_workers = n_workers
         self._max_episodes_in_memory = max_episodes_in_memory
+        self.example_writer = writer_lib.ExampleWriter(file_format=self.info.file_format)
+
 
     def _download_and_prepare(  # pytype: disable=signature-mismatch  # overriding-parameter-type-checks
         self,
@@ -51,7 +53,8 @@ class MultiThreadedAdhocDatasetBuilder(tfds.core.dataset_builders.AdhocBuilder):
             max_examples_per_split=download_config.max_examples_per_split,
             beam_options=download_config.beam_options,
             beam_runner=download_config.beam_runner,
-            file_format=self.info.file_format,
+            # file_format=self.info.file_format,
+            example_writer=self.example_writer,
             shard_config=download_config.get_shard_config(),
             generator_fcn=self._generator_fcn,
             n_workers=self._n_workers,
@@ -176,7 +179,8 @@ class ParallelSplitBuilder(split_builder_lib.SplitBuilder):
             filename_template=filename_template,
             hash_salt=split_name,
             disable_shuffling=disable_shuffling,
-            file_format=self._file_format,
+            # file_format=self._file_format,
+            example_writer = self._example_writer,
             shard_config=self._shard_config,
         )
 
@@ -204,6 +208,7 @@ class ParallelSplitBuilder(split_builder_lib.SplitBuilder):
             )
             # write results to shuffler --> this will automatically offload to disk if necessary
             print("Writing conversion results...")
+            writer._num_examples = 0
             for result in itertools.chain(*results):
                 key, serialized_example = result
                 writer._shuffler.add(key, serialized_example)
